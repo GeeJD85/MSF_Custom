@@ -1,5 +1,6 @@
 ﻿using Barebones.Logging;
 using Barebones.Networking;
+using GW.Master;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -18,7 +19,8 @@ namespace Barebones.MasterServer
     /// </summary>
     public class ProfilesModule : BaseServerModule
     {
-        private AuthModule authModule;
+        private Auth_Module authModule;
+        private Profiles_Module profileModule;
         private HashSet<string> debouncedSaves;
         private HashSet<string> debouncedClientUpdates;
 
@@ -66,7 +68,8 @@ namespace Barebones.MasterServer
                 return;
             }
 
-            AddOptionalDependency<AuthModule>();
+            AddOptionalDependency<Auth_Module>();
+            AddOptionalDependency<Profiles_Module>();
 
             ProfilesList = new Dictionary<string, ObservableServerProfile>();
             debouncedSaves = new HashSet<string>();
@@ -75,6 +78,8 @@ namespace Barebones.MasterServer
 
         public override void Initialize(IServer server)
         {
+            profileModule = server.GetModule<Profiles_Module>();
+
             profileDatabaseAccessor = Msf.Server.DbAccessors.GetAccessor<IProfilesDatabaseAccessor>();
 
             if (profileDatabaseAccessor == null)
@@ -83,7 +88,7 @@ namespace Barebones.MasterServer
             }
 
             // Auth dependency setup
-            authModule = server.GetModule<AuthModule>();
+            authModule = server.GetModule<Auth_Module>();
 
             if (authModule != null)
             {

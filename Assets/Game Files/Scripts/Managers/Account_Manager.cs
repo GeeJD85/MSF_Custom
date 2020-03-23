@@ -31,16 +31,14 @@ namespace GW.Master
             passwordResetEntry_View = ViewsManager.GetView<PasswordResetEntry_View>("PasswordResetEntry");
             emailConfirmationView = ViewsManager.GetView<EmailConfirmation_View>("EmailConfirmationView");
 
-            rememberToggle = GameObject.Find("RememberToggle").GetComponent<Toggle>();
-            //CheckPlayerPrefs();
+            rememberToggle = GameObject.Find("RememberToggle").GetComponent<Toggle>();            
 
             MsfTimer.WaitForEndOfFrame(() => 
-            { 
-                if(IsConnected)
-                {
-                    Msf.Events.Invoke(Event_Keys.hideLoadingInfo);                    
-                    loginView.Show();
-                }
+            {
+                CheckPlayerPrefs();
+
+                if (IsConnected)              
+                    Msf.Events.Invoke(Event_Keys.hideLoadingInfo);
             });            
         }
 
@@ -57,7 +55,7 @@ namespace GW.Master
                     if (accountInfo != null)
                     {
                         loginView.Hide();
-                        SetPlayerPrefs();
+                        SetPlayerPrefs(); //Save username if checkbox is ticked
 
                         //If we want email verification
                         if (accountInfo.IsEmailConfirmed)
@@ -244,12 +242,10 @@ namespace GW.Master
 
             if (Msf.Client.Auth.IsSignedIn)
             {
-                logger.Info("Connected and signed in!");
                 OnSignedInEvent?.Invoke();
             }
             else
             {
-                logger.Info("Failed to sign in");
                 Msf.Events.Invoke(Event_Keys.hideLoadingInfo);
                 loginView.Show();
             }
@@ -265,12 +261,15 @@ namespace GW.Master
 
             ViewsManager.HideAllViews();
             Initialize();
-            ConnectionToMaster.Instance.StartConnection();
+            ConnectionTo_Master.Instance.StartConnection();
         }
 
         #region PlayerPrefs
         void CheckPlayerPrefs()
         {
+            if (!PlayerPrefs.HasKey("rememberMe"))
+                return;
+
             rememberToggle.isOn = PlayerPrefs.GetInt("rememberMe", -1) > 0;
             loginView.SetInputFieldsValues(PlayerPrefs.GetString("username"), string.Empty);
         }

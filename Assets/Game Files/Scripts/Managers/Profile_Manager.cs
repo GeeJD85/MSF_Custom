@@ -45,7 +45,6 @@ namespace GW.Master
 
         public void LoadProfile()
         {
-            logger.Info("LoadProfile called");
             Msf.Events.Invoke(Event_Keys.showLoadingInfo, "Loading profile... please wait!");
 
             MsfTimer.WaitForSeconds(1, () =>

@@ -8,7 +8,7 @@ namespace GW.Master
 {
     public enum ObservablePropertyCodes { DisplayName }
 
-    public class Profiles_Module : ProfilesModule
+    public class Profiles_Module : BaseProfiles_Module
     {
         public HelpBox _header = new HelpBox()
         {
@@ -27,7 +27,6 @@ namespace GW.Master
 
         private ObservableServerProfile CreateProfileInServer(string username, IPeer clientPeer)
         {
-            Debug.Log("Called it");
             return new ObservableServerProfile(username, clientPeer)
             {
                 new ObservableString((short)ObservablePropertyCodes.DisplayName, username)
@@ -35,7 +34,6 @@ namespace GW.Master
         }
 
         #region Handlers
-
         private void UpdateDisplayNameRequestHandler(IIncommingMessage message)
         {
             var userExtension = message.Peer.GetExtension<IUserPeerExtension>();

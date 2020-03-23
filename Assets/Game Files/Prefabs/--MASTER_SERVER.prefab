@@ -47,7 +47,7 @@ MonoBehaviour:
   usernameMinChars: 4
   usernameMaxChars: 12
   getPeerDataPermissionsLevel: 0
-  mailer: {fileID: 0}
+  mailer: {fileID: 7840663201972983873}
   emailAddressValidationTemplate: ^[a-z0-9][-a-z0-9._]+@([-a-z0-9]+\.)+[a-z]{2,5}$
 --- !u!1 &7840663200788414751
 GameObject:
@@ -89,6 +89,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7840663201312341850}
+  - component: {fileID: 174841033}
   m_Layer: 0
   m_Name: ProfilesModule
   m_TagString: Untagged
@@ -110,6 +111,24 @@ Transform:
   m_Father: {fileID: 7840663201556347283}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &174841033
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7840663201312341845}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: debb4f644023b974585ea44a18a8ba5e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  logLevel: 3
+  unloadProfileAfter: 20
+  saveProfileInterval: 1
+  clientUpdateInterval: 0
+  editProfilePermissionLevel: 0
+  ignoreProfileMissmatchError: 0
 --- !u!1 &7840663201556347501
 GameObject:
   m_ObjectHideFlags: 0
@@ -119,7 +138,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7840663201556347283}
-  - component: {fileID: 7840663201556347282}
+  - component: {fileID: 1717089022630650913}
   m_Layer: 0
   m_Name: --MASTER_SERVER
   m_TagString: Untagged
@@ -145,7 +164,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7840663201556347282
+--- !u!114 &1717089022630650913
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -161,10 +180,10 @@ MonoBehaviour:
   lookInChildrenOnly: 1
   permissions: []
   targetFrameRate: 60
-  logLevel: 0
+  logLevel: 3
   usePublicIp: 0
   ip: 127.0.0.1
-  port: 5000
+  port: 55000
   autoStartInEditor: 1
 --- !u!1 &7840663201691066447
 GameObject:
@@ -209,7 +228,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04d9140ff0c36534a9689c7b16977f58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  logLevel: 3
+  logLevel: 0
 --- !u!1 &7840663201972983875
 GameObject:
   m_ObjectHideFlags: 0

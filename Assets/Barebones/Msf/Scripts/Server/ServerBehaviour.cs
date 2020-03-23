@@ -259,13 +259,13 @@ namespace Barebones.MasterServer
 
         private void OnConnectedEventHandle(IPeer peer)
         {
-            logger.Debug($"Client {peer.Id} connected to server. The number of connected is: {connectedPeers.Count}");
-
             // Listen to messages
             peer.OnMessageReceivedEvent += OnMessageReceived;
 
             // Save the peer
             connectedPeers[peer.Id] = peer;
+
+            logger.Debug($"Client {peer.Id} connected to server. The number of connected is: {connectedPeers.Count}");
 
             // Create the security extension
             var extension = peer.AddExtension(new SecurityInfoPeerExtension());
@@ -284,13 +284,13 @@ namespace Barebones.MasterServer
 
         private void OnDisconnectedEventHandler(IPeer peer)
         {
-            logger.Debug($"Client {peer.Id} disconnected from server. Left: {connectedPeers.Count}");
-
             // Remove listener to messages
             peer.OnMessageReceivedEvent -= OnMessageReceived;
 
             // Remove the peer
             connectedPeers.Remove(peer.Id);
+
+            logger.Debug($"Client {peer.Id} disconnected from server. Still connected: {connectedPeers.Count}");
 
             var extension = peer.GetExtension<SecurityInfoPeerExtension>();
             if (extension != null)

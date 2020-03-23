@@ -70,14 +70,14 @@ namespace Barebones.MasterServer
             base.Start();
 
             // Start master server at start
-            if (Msf.Args.StartMaster && !Msf.Runtime.IsEditor)
+            if (Msf.Args.StartMaster)
             {
                 // Start the server on next frame
-                MsfTimer.WaitForEndOfFrame(() => {
+                MsfTimer.WaitForEndOfFrame(() =>
+                {
                     StartServer();
                 });
             }
-            StartServer();
         }
 
         /// <summary>
