@@ -31,6 +31,15 @@ namespace Barebones.MasterServer.Examples.BasicAuthorization
             emailConfirmationCodes.EnsureIndex(a => a.Email, true);
         }
 
+        public IAccountInfoData SearchUsers(string search)
+        {
+            foreach (var user in accounts.Find(a => a.Username == search))
+            {
+                if (user.Username == search) { return user; };
+            };
+            return null;
+        }
+
         public IAccountInfoData CreateAccountInstance()
         {
             return new AccountInfoLiteDb();
