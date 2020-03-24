@@ -1,4 +1,5 @@
 ﻿using Barebones.Logging;
+using Barebones.MasterServer;
 using Barebones.Networking;
 using System;
 using System.Collections.Generic;
@@ -6,7 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using UnityEngine;
 
-namespace Barebones.MasterServer
+namespace GW.Master
 {
     /// <summary>
     /// Authentication module, which handles logging in and registration of accounts

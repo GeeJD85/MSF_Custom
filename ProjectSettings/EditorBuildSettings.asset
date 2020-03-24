@@ -5,7 +5,10 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Game Files/Scenes/My_MasterServerAndClient.unity
     guid: 3ef9f216973cdd349996b2973dad762a
+  - enabled: 1
+    path: Assets/Game Files/Scenes/My_Master.unity
+    guid: 235f34e2f5651f448969403a85efe2dc
   m_configObjects: {}

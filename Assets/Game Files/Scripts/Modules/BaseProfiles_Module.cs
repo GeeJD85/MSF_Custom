@@ -10,7 +10,6 @@ using UnityEngine;
 namespace GW.Master
 {
     public delegate ObservableServerProfile ProfileFactory(string username, IPeer clientPeer);
-
     /// <summary>
     /// Handles player profiles within master server.
     /// Listens to changes in player profiles, and sends updates to
