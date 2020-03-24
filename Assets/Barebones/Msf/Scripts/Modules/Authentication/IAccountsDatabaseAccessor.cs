@@ -17,13 +17,6 @@
         /// <summary>
         /// Gets user account from database by token
         /// </summary>
-        /// <param name="search"></param>
-        /// <returns></returns>
-        IAccountInfoData SearchUsers(string search);
-
-        /// <summary>
-        /// Gets user account from database by token
-        /// </summary>
         /// <param name="token"></param>
         /// <returns></returns>
         IAccountInfoData GetAccountByToken(string token);

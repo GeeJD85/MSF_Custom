@@ -1,6 +1,7 @@
 ﻿#if (!UNITY_WEBGL && !UNITY_IOS) || UNITY_EDITOR
 using Barebones.MasterServer;
 using LiteDB;
+using System;
 
 namespace GW.Master
 {
@@ -15,6 +16,11 @@ namespace GW.Master
 
             profiles = this.database.GetCollection<ProfileInfoData>("profiles");
             profiles.EnsureIndex(a => a.Username, true); //Ensure true means value must be unique
+        }
+
+        public IProfileData GetProfileByUsername(string username)
+        {
+            return profiles.FindOne(a => a.Username == username);
         }
 
         //Get profile info from database
@@ -49,11 +55,18 @@ namespace GW.Master
             return data;
         }
 
-        private class ProfileInfoData
+        private class ProfileInfoData : IProfileData
         {
             [BsonId]
             public string Username { get; set; }
             public byte[] Data { get; set; }
+
+            public event Action<IProfileData> OnChangedEvent;
+
+            public void MarkAsDirty()
+            {
+                OnChangedEvent?.Invoke(this);
+            }
         }
     }
 }

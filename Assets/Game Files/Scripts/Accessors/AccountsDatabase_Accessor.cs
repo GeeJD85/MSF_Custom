@@ -39,15 +39,6 @@ namespace GW.Master
             return accounts.FindOne(a => a.Username == username);
         }
 
-        public IAccountInfoData SearchUsers(string search)
-        {
-            foreach(var user in accounts.Find(a => a.Username == search))
-            {
-                if (user.Username == search) { return user; };
-            };
-            return null;
-        }
-
         public IAccountInfoData GetAccountByToken(string token)
         {
             return accounts.FindOne(a => a.Token == token);

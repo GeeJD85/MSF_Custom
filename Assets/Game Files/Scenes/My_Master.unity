@@ -121,62 +121,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &1010244751 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7840663201556347501, guid: baa568ef20e76e8438d3802747bf7243,
-    type: 3}
-  m_PrefabInstance: {fileID: 7840663201482613650}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1010244752
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1010244751}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 71583e99f1500b641a0c79237e1616ad, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  lookForModules: 1
-  lookInChildrenOnly: 1
-  permissions: []
-  targetFrameRate: 60
-  logLevel: 0
-  usePublicIp: 0
-  ip: 127.0.0.1
-  port: 5000
-  autoStartInEditor: 0
---- !u!114 &1010244754
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1010244751}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a7c6ece3147f0984e8f2adb725fe7382, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxHeight: 0.7
-  smallTerminalRatio: 0.33
-  toggleSpeed: 360
-  toggleHotkey: '`'
-  toggleFullHotkey: '#escape'
-  bufferSize: 512
-  consoleFont: {fileID: 0}
-  inputCaret: '>'
-  showGUIButtons: 0
-  rightAlignButtons: 0
-  inputContrast: 0
-  backgroundColor: {r: 0, g: 0, b: 0, a: 1}
-  foregroundColor: {r: 1, g: 1, b: 1, a: 1}
-  shellColor: {r: 1, g: 1, b: 1, a: 1}
-  inputColor: {r: 0, g: 1, b: 1, a: 1}
-  warningColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  errorColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!1 &2026876371
 GameObject:
   m_ObjectHideFlags: 0
@@ -267,10 +211,13 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1717089022630650913, guid: baa568ef20e76e8438d3802747bf7243,
-        type: 3}
-      propertyPath: autoStartInEditor
-      value: 1
+    - target: {fileID: 1010244752, guid: baa568ef20e76e8438d3802747bf7243, type: 3}
+      propertyPath: ip
+      value: 172.31.26.23
+      objectReference: {fileID: 0}
+    - target: {fileID: 1010244754, guid: baa568ef20e76e8438d3802747bf7243, type: 3}
+      propertyPath: showGUIButtons
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7840663201556347283, guid: baa568ef20e76e8438d3802747bf7243,
         type: 3}
@@ -332,11 +279,5 @@ PrefabInstance:
       propertyPath: m_Name
       value: --MASTER_SERVER
       objectReference: {fileID: 0}
-    - target: {fileID: 7840663201556347501, guid: baa568ef20e76e8438d3802747bf7243,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 1717089022630650913, guid: baa568ef20e76e8438d3802747bf7243, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: baa568ef20e76e8438d3802747bf7243, type: 3}
