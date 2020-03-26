@@ -99,6 +99,13 @@
         UpdateServerProfile,
         UpdateClientProfile,
         UpdateDisplayNameRequest,
-        Level
+        Level,
+
+        //Friends
+        ServerFriendlistRequest,
+        UpdateServerFriendlist,
+        ClientFriendlistRequest,
+        UpdateClientFriendlist,
+        SearchForUserByName,
     }
 }

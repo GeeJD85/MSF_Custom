@@ -5,12 +5,20 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using TMPro;
 using System.Collections.Generic;
+using System;
+
+
+//SORT THIS SHIT OUT AND MOVE DB STUFF TO A FRIENDLIST MANAGER!!!!!!
+
+
 
 namespace GW.Master
 {
-    public class Friendlist : MonoBehaviour
+    public class Friendlist : BaseClientModule
     {
-        List<IProfileData> myFriendsList;
+        public ObservableFriendList ClientFriendList { get; private set; }
+
+        public List<string> myFriendsList;
         List<GameObject> friendPlatesInList; //So we can sort alphabetically etc
                 
         public GameObject friendPlatePrefab;
@@ -24,11 +32,24 @@ namespace GW.Master
 
         bool isOpen = false;
         bool searchOpen = false;
+        public event Action<short, IObservableProperty> OnPropertyUpdatedEvent;
 
-        private void Start()
+        protected override void Initialize()
         {
-            myFriendsList = new List<IProfileData>();
+            myFriendsList = new List<string>();
             friendPlatesInList = new List<GameObject>();
+
+            ClientFriendList = new ObservableFriendList
+            {
+                new ObservableString((short)ObservableFriendCodes.Username)
+            };
+
+            ClientFriendList.OnPropertyUpdatedEvent += OnPropertyUpdatedEventHandler;       
+        }
+        private void OnPropertyUpdatedEventHandler(short key, IObservableProperty property)
+        {
+            OnPropertyUpdatedEvent?.Invoke(key, property);
+            logger.Debug($"Property with code: {key} were updated: {property.Serialize()}");
         }
 
         #region Open/Close Windows
@@ -91,44 +112,44 @@ namespace GW.Master
         #endregion Open/Close Windows
 
         public void SearchFriends(string username)
+        {            
+            Connection.SendMessage((short)MsfMessageCodes.SearchForUserByName, username.ToBytes(), OnSearchResultReceivedFromServer);
+        }
+
+        private void OnSearchResultReceivedFromServer(ResponseStatus status, IIncommingMessage response)
         {
-            var profilesDBAccessor = Msf.Server.DbAccessors.GetAccessor<IProfilesDatabaseAccessor>();
-
-            var userData = profilesDBAccessor.GetProfileByUsername(username);
-
-            if (userData == null) //Friend wasnt found
+            if (status == ResponseStatus.Success)
             {
-                Msf.Events.Invoke(Event_Keys.showOkDialogBox, "User not found. Check spelling and try again!");
-                searchInput.ActivateInputField();
-                return;
+                UpdateFriendsList(response.AsString());
+                searchInput.text = "";
             }
-
-            if (userData.Username == username) //Friend found, add to friend list
+            else
             {
-                UpdateFriendsList(userData);
+                Msf.Events.Invoke(Event_Keys.showOkDialogBox, response.AsString());
+                logger.Error(response.AsString());
                 searchInput.text = "";
             }
         }
 
-        void UpdateFriendsList(IProfileData friendData)
+        void UpdateFriendsList(string friendName)
         {
             for(int i=0; i<myFriendsList.Count; i++)
             {
-                if (friendData.Username == myFriendsList[i].Username)
+                if (friendName == myFriendsList[i])
                     return;
             }
 
-            myFriendsList.Add(friendData);
-            AddFriendPlate();
+            myFriendsList.Add(friendName);
+            AddFriendPlate(friendName);
         }
 
-        void AddFriendPlate()
+        void AddFriendPlate(string friendName)
         {
             for(int i=0; i < myFriendsList.Count; i++)
             {
                 GameObject go = Instantiate(friendPlatePrefab, prefabParent);
-                go.GetComponent<Friendplate_Function>().myData = myFriendsList[i];
-                go.name = myFriendsList[i].Username;
+                go.GetComponent<Friendplate_Function>()._username = friendName;
+                go.name = myFriendsList[i];
                 friendPlatesInList.Add(go);
             }
         }
@@ -145,7 +166,7 @@ namespace GW.Master
             Debug.Log("Friends: " + myFriendsList.Count + " before deletion");
             for(int i=0; i < myFriendsList.Count; i++)
             {
-                if(selectedFriendPlate.GetComponent<Friendplate_Function>()._username == myFriendsList[i].Username)
+                if(selectedFriendPlate.GetComponent<Friendplate_Function>()._username == myFriendsList[i])
                 {
                     friendPlatesInList.Remove(selectedFriendPlate);                    
                     myFriendsList.Remove(myFriendsList[i]);
@@ -153,6 +174,26 @@ namespace GW.Master
                     Destroy(selectedFriendPlate);
                 }
             }
+        }
+
+        public void LoadFriendlist()
+        {
+            Msf.Events.Invoke(Event_Keys.showLoadingInfo, "Loading profile... please wait!");
+
+            MsfTimer.WaitForSeconds(1, () =>
+            {
+                Msf.Client.Friendlist.GetFriendlistValues(ClientFriendList, (successful, error) =>
+                {
+                    if (successful)
+                    {
+                        Msf.Events.Invoke(Event_Keys.hideLoadingInfo);
+                    }
+                    else
+                    {
+                        Msf.Events.Invoke(Event_Keys.showOkDialogBox, $"An error has occured whilst retrieving your profile: " + error);
+                    }
+                });
+            });
         }
     }
 

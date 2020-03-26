@@ -1,4 +1,5 @@
 ﻿using Barebones.Networking;
+using GW.Master;
 
 namespace Barebones.MasterServer
 {
@@ -18,6 +19,9 @@ namespace Barebones.MasterServer
 
         public MsfProfilesClient Profiles { get; private set; }
 
+        public MsfFriendClient Friendlist { get; private set; }
+
+
         public MsfClient(IClientSocket connection) : base(connection)
         {
             Rooms = new MsfRoomsClient(connection);
@@ -27,6 +31,7 @@ namespace Barebones.MasterServer
             Chat = new MsfChatClient(connection);
             Lobbies = new MsfLobbiesClient(connection);
             Profiles = new MsfProfilesClient(connection);
+            Friendlist = new MsfFriendClient(connection);
         }
     }
 }

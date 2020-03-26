@@ -21,6 +21,7 @@ namespace GW.Master
             {
                 Msf.Server.DbAccessors.SetAccessor<IAccountsDatabaseAccessor>(new AccountsDatabase_Accessor(new LiteDatabase(@"accounts.db")));
                 Msf.Server.DbAccessors.SetAccessor<IProfilesDatabaseAccessor>(new ProfilesDatabase_Accessor(new LiteDatabase(@"profiles.db")));
+                Msf.Server.DbAccessors.SetAccessor<IFriendlistDatabaseAccessor>(new FriendlistDatabaseAccessor(new LiteDatabase(@"friendlist.db")));
             }
             catch (Exception e)
             {

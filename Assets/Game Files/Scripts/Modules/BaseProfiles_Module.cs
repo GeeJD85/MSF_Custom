@@ -276,7 +276,7 @@ namespace GW.Master
             // Wait for the delay
             yield return new WaitForSecondsRealtime(delay);
 
-            // If user is not actually logged in, remove the profile
+            // If user is logged in, do not remove the profile
             if (authModule.IsUserLoggedIn(username))
             {
                 yield break;

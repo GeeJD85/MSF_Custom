@@ -5469,6 +5469,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1482752c08add3243a8b87c528056faf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  logLevel: 3
   friendPlatePrefab: {fileID: 8188367367847199077, guid: 0765c54d23fcd81458f36ef13382da0a,
     type: 3}
   prefabParent: {fileID: 997737534}
@@ -17470,7 +17471,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   logLevel: 0
   readMasterServerAddressFromCmd: 1
-  masterIp: 18.130.148.150
+  masterIp: 127.0.0.1
   masterPort: 5000
   connectOnStart: 1
   minTimeToConnect: 0.5

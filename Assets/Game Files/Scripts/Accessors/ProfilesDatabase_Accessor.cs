@@ -1,7 +1,6 @@
 ﻿#if (!UNITY_WEBGL && !UNITY_IOS) || UNITY_EDITOR
 using Barebones.MasterServer;
 using LiteDB;
-using System;
 
 namespace GW.Master
 {
@@ -60,13 +59,6 @@ namespace GW.Master
             [BsonId]
             public string Username { get; set; }
             public byte[] Data { get; set; }
-
-            public event Action<IProfileData> OnChangedEvent;
-
-            public void MarkAsDirty()
-            {
-                OnChangedEvent?.Invoke(this);
-            }
         }
     }
 }
