@@ -55,13 +55,13 @@ namespace Barebones.MasterServer
             // Check is command line argument '-msfMasterPort' is defined
             if (Msf.Args.IsProvided(Msf.Args.Names.MasterIp))
             {
-                ip = Msf.Args.MasterIp;
+                serverIP = Msf.Args.MasterIp;
             }
 
             // Check is command line argument '-msfMasterPort' is defined
             if (Msf.Args.IsProvided(Msf.Args.Names.MasterPort))
             {
-                port = Msf.Args.MasterPort;
+                serverPort = Msf.Args.MasterPort;
             }
         }
 
@@ -70,11 +70,10 @@ namespace Barebones.MasterServer
             base.Start();
 
             // Start master server at start
-            if (Msf.Args.StartMaster)
+            if (Msf.Args.StartMaster && !Msf.Runtime.IsEditor)
             {
                 // Start the server on next frame
-                MsfTimer.WaitForEndOfFrame(() =>
-                {
+                MsfTimer.WaitForEndOfFrame(() => {
                     StartServer();
                 });
             }
@@ -83,8 +82,7 @@ namespace Barebones.MasterServer
         /// <summary>
         /// Start master server with given port
         /// </summary>
-        /// <param name="port"></param>
-        public override void StartServer(int port)
+        public override void StartServer()
         {
             // If master is allready running then return function
             if (IsRunning)
@@ -94,12 +92,12 @@ namespace Barebones.MasterServer
 
             logger.Info($"Starting Master Server... {Msf.Version}");
 
-            base.StartServer(port);
+            base.StartServer();
         }
 
         protected override void OnStartedServer()
         {
-            logger.Info($"Master Server is started and listening to: {ip}:{port}");
+            logger.Info($"Master Server is started and listening to: {serverIP}:{serverPort}");
 
             base.OnStartedServer();
 

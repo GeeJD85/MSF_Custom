@@ -99,13 +99,11 @@
         UpdateServerProfile,
         UpdateClientProfile,
         UpdateDisplayNameRequest,
-        Level,
 
-        //Friends
-        ServerFriendlistRequest,
-        UpdateServerFriendlist,
-        ClientFriendlistRequest,
-        UpdateClientFriendlist,
+
+        //Friendlist
         SearchForUserByName,
+        UpdateClientFriendlist,
+        ClientFriendlistRequest,
     }
 }

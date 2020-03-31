@@ -78,10 +78,10 @@ namespace Barebones.MasterServer
         protected bool usePublicIp = false;
 
         [SerializeField, Tooltip("IP address, to which server will listen to")]
-        protected string ip = "127.0.0.1";
+        protected string serverIP = "127.0.0.1";
 
         [SerializeField, Tooltip("Port, to which server will listen to")]
-        protected int port = 55000;
+        protected int serverPort = 55000;
 
         [Header("Editor Settings"), SerializeField]
         private HelpBox hpEditor = new HelpBox()
@@ -156,21 +156,21 @@ namespace Barebones.MasterServer
         }
 
         /// <summary>
-        /// Sets the master server IP
+        /// Sets the server IP
         /// </summary>
         /// <param name="listenToIp"></param>
         public void SetIpAddress(string listenToIp)
         {
-            ip = listenToIp;
+            serverIP = listenToIp;
         }
 
         /// <summary>
-        /// Sets the master server port
+        /// Sets the server port
         /// </summary>
         /// <param name="listenToPort"></param>
         public void SetPort(int listenToPort)
         {
-            port = listenToPort;
+            serverPort = listenToPort;
         }
 
         /// <summary>
@@ -178,7 +178,7 @@ namespace Barebones.MasterServer
         /// </summary>
         public virtual void StartServer()
         {
-            StartServer(ip, port);
+            StartServer(serverIP, serverPort);
         }
 
         /// <summary>
@@ -187,7 +187,7 @@ namespace Barebones.MasterServer
         /// <param name="listenToPort"></param>
         public virtual void StartServer(int listenToPort)
         {
-            StartServer(ip, listenToPort);
+            StartServer(serverIP, listenToPort);
         }
 
         /// <summary>
@@ -204,18 +204,18 @@ namespace Barebones.MasterServer
                 Msf.Helper.GetPublicIp((publicIp) =>
                 {
                     socket.Listen(publicIp, listenToPort);
+                    LookForModules();
                     IsRunning = true;
                     OnServerStartedEvent?.Invoke();
-                    LookForModules();
                     OnStartedServer();
                 });
             }
             else
             {
                 socket.Listen(listenToIp, listenToPort);
+                LookForModules();
                 IsRunning = true;
                 OnServerStartedEvent?.Invoke();
-                LookForModules();
                 OnStartedServer();
             }
         }
@@ -259,13 +259,13 @@ namespace Barebones.MasterServer
 
         private void OnConnectedEventHandle(IPeer peer)
         {
+            logger.Debug($"Client {peer.Id} connected to server. Total clients are: {connectedPeers.Count + 1}");
+
             // Listen to messages
             peer.OnMessageReceivedEvent += OnMessageReceived;
 
             // Save the peer
             connectedPeers[peer.Id] = peer;
-
-            logger.Debug($"Client {peer.Id} connected to server. The number of connected is: {connectedPeers.Count}");
 
             // Create the security extension
             var extension = peer.AddExtension(new SecurityInfoPeerExtension());
@@ -284,13 +284,13 @@ namespace Barebones.MasterServer
 
         private void OnDisconnectedEventHandler(IPeer peer)
         {
+            logger.Debug($"Client {peer.Id} disconnected from server. Total clients are: {connectedPeers.Count - 1}");
+
             // Remove listener to messages
             peer.OnMessageReceivedEvent -= OnMessageReceived;
 
             // Remove the peer
             connectedPeers.Remove(peer.Id);
-
-            logger.Debug($"Client {peer.Id} disconnected from server. Still connected: {connectedPeers.Count}");
 
             var extension = peer.GetExtension<SecurityInfoPeerExtension>();
             if (extension != null)

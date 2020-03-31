@@ -8,7 +8,7 @@ namespace Barebones.Networking
     ///     Equivalent of System.IO.BinaryWriter, but with either endianness, depending on
     ///     the EndianBitConverter it is constructed with.
     /// </summary>
-    public sealed class EndianBinaryWriter : IDisposable
+    public class EndianBinaryWriter : IDisposable
     {
         #region IDisposable Members
 
@@ -30,17 +30,17 @@ namespace Barebones.Networking
         #region Fields not directly related to properties
 
         /// <summary>
-        /// Whether or not this writer has been disposed yet.
+        ///     Whether or not this writer has been disposed yet.
         /// </summary>
         private bool disposed;
 
         /// <summary>
-        /// Buffer used for temporary storage during conversion from primitives
+        ///     Buffer used for temporary storage during conversion from primitives
         /// </summary>
         private readonly byte[] buffer = new byte[16];
 
         /// <summary>
-        /// Buffer used for Write(char)
+        ///     Buffer used for Write(char)
         /// </summary>
         private readonly char[] charBuffer = new char[1];
 
@@ -54,7 +54,10 @@ namespace Barebones.Networking
         /// </summary>
         /// <param name="bitConverter">Converter to use when writing data</param>
         /// <param name="stream">Stream to write data to</param>
-        public EndianBinaryWriter(EndianBitConverter bitConverter, Stream stream) : this(bitConverter, stream, Encoding.UTF8) { }
+        public EndianBinaryWriter(EndianBitConverter bitConverter,
+            Stream stream) : this(bitConverter, stream, Encoding.UTF8)
+        {
+        }
 
         /// <summary>
         ///     Constructs a new binary writer with the given bit converter, writing
@@ -65,9 +68,19 @@ namespace Barebones.Networking
         /// <param name="encoding">Encoding to use when writing character data</param>
         public EndianBinaryWriter(EndianBitConverter bitConverter, Stream stream, Encoding encoding)
         {
+            if (bitConverter == null)
+            {
+                throw new ArgumentNullException("bitConverter");
+            }
+
             if (stream == null)
             {
-                throw new ArgumentNullException(nameof(stream));
+                throw new ArgumentNullException("stream");
+            }
+
+            if (encoding == null)
+            {
+                throw new ArgumentNullException("encoding");
             }
 
             if (!stream.CanWrite)
@@ -76,8 +89,8 @@ namespace Barebones.Networking
             }
 
             BaseStream = stream;
-            BitConverter = bitConverter ?? throw new ArgumentNullException(nameof(bitConverter));
-            Encoding = encoding ?? throw new ArgumentNullException(nameof(encoding));
+            BitConverter = bitConverter;
+            Encoding = encoding;
         }
 
         #endregion

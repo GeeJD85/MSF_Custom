@@ -53,7 +53,14 @@ namespace Barebones.Networking
             // Stop listening when application closes
             MsfTimer.Instance.OnApplicationQuitEvent += Stop;
 
-            server = new WebSocketServer(IPAddress.Parse(ip), port);
+            if(ip == "127.0.0.1" | ip == "localhost")
+            {
+                server = new WebSocketServer(port);
+            }
+            else
+            {
+                server = new WebSocketServer(IPAddress.Parse(ip), port);
+            }
 
             SetupService(server);
 

@@ -50,6 +50,21 @@
             public string RoomPort { get { return "-msfRoomPort"; } }
 
             /// <summary>
+            /// Use this cmd to setup server room as provate or not
+            /// </summary>
+            public string RoomIsPrivate { get { return "-msfRoomIsPrivate"; } }
+
+            /// <summary>
+            /// Use this cmd to setup server room name
+            /// </summary>
+            public string RoomName { get { return "-msfRoomName"; } }
+
+            /// <summary>
+            /// Use this cmd to setup server room password
+            /// </summary>
+            public string RoomPassword { get { return "-msfRoomPassword"; } }
+
+            /// <summary>
             /// Use this cmd to setup the max number of connections of the spawned room server
             /// </summary>
             public string RoomMaxConnections { get { return "-msfRoomMaxConnections"; } }
@@ -81,7 +96,7 @@
             public string LobbyId { get { return "-msfLobbyId"; } }
 
             /// <summary>
-            /// Use this command to override <see cref="BaseSpawnerBehaviour.spawnInBatchmode"/> check box
+            /// Use this command to override <see cref="SpawnerBehaviour.spawnInBatchmode"/> check box
             /// </summary>
             public string DontSpawnInBatchmode { get { return "-msfDontSpawnInBatchmode"; } }
 

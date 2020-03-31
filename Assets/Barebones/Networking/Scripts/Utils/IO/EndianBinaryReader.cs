@@ -5,12 +5,28 @@ using System.Text;
 namespace Barebones.Networking
 {
     /// <summary>
-    /// Equivalent of System.IO.BinaryReader, but with either endianness, depending on
-    /// the EndianBitConverter it is constructed with. No data is buffered in the
-    /// reader; the client may seek within the stream at will.
+    ///     Equivalent of System.IO.BinaryReader, but with either endianness, depending on
+    ///     the EndianBitConverter it is constructed with. No data is buffered in the
+    ///     reader; the client may seek within the stream at will.
     /// </summary>
     public class EndianBinaryReader : IDisposable
     {
+        #region IDisposable Members
+
+        /// <summary>
+        ///     Disposes of the underlying stream.
+        /// </summary>
+        public void Dispose()
+        {
+            if (!disposed)
+            {
+                disposed = true;
+                ((IDisposable)BaseStream).Dispose();
+            }
+        }
+
+        #endregion
+
         #region Fields not directly related to properties
 
         /// <summary>
@@ -599,35 +615,6 @@ namespace Barebones.Networking
             return index;
         }
 
-        #endregion
-
-        #region IDisposable Support
-
-        /// <summary>
-        /// Disposes of the underlying stream.
-        /// </summary>
-        /// <param name="disposing"></param>
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposed)
-            {
-                if (disposing)
-                {
-                    ((IDisposable)BaseStream).Dispose();
-                }
-
-                disposed = true;
-            }
-        }
-
-        /// <summary>
-        /// Disposes of the underlying stream.
-        /// </summary>
-        public void Dispose()
-        {
-            Dispose(true);
-            // GC.SuppressFinalize(this);
-        }
         #endregion
     }
 }

@@ -13,7 +13,6 @@
         /// <param name="username"></param>
         /// <returns></returns>
         IAccountInfoData GetAccountByUsername(string username);
-
         /// <summary>
         /// Gets user account from database by token
         /// </summary>

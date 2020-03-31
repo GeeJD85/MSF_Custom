@@ -180,7 +180,7 @@ namespace Barebones.MasterServer
         /// Sends a generic login request
         /// </summary>
         public void SignIn(Dictionary<string, string> data, SignInCallback callback, IClientSocket connection)
-        {            
+        {
             if (!connection.IsConnected)
             {
                 callback.Invoke(null, "Not connected to server");

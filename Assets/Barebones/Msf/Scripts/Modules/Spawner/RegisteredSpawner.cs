@@ -12,6 +12,9 @@ namespace Barebones.MasterServer
         private readonly SpawnersModule _module;
         public static int MaxConcurrentRequests = 8;
 
+        /// <summary>
+        /// 
+        /// </summary>
         public int SpawnerId { get; set; }
         public IPeer Peer { get; set; }
         public SpawnerOptions Options { get; set; }
@@ -116,17 +119,23 @@ namespace Barebones.MasterServer
             });
         }
 
+        /// <summary>
+        /// Send request to kill process by given <paramref name="spawnId"/>
+        /// </summary>
+        /// <param name="spawnId"></param>
+        /// <param name="callback"></param>
         public void SendKillRequest(int spawnId, KillRequestCallback callback)
         {
-            var packet = new KillSpawnedProcessPacket()
+            var packet = new KillSpawnedProcessRequestPacket()
             {
                 SpawnerId = SpawnerId,
                 SpawnId = spawnId
             };
+
             Peer.SendMessage((short)MsfMessageCodes.KillProcessRequest, packet, (status, response) =>
-           {
-               callback.Invoke(status == ResponseStatus.Success);
-           });
+            {
+                callback.Invoke(status == ResponseStatus.Success);
+            });
         }
 
         public void UpdateProcessesCount(int packetB)

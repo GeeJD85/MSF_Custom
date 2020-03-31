@@ -7,9 +7,16 @@ using UnityEngine;
 
 namespace Barebones.MasterServer
 {
-    public class BaseSpawnerBehaviour : Singleton<BaseSpawnerBehaviour>
+    public class SpawnerBehaviour : Singleton<SpawnerBehaviour>
     {
+        /// <summary>
+        /// Current spawner controller assigned to this behaviour
+        /// </summary>
         protected SpawnerController spawnerController;
+
+        /// <summary>
+        /// Just logger :)
+        /// </summary>
         protected Logging.Logger logger;
 
         [SerializeField]
@@ -70,6 +77,7 @@ namespace Barebones.MasterServer
         {
             // Subscribe to connection event
             Msf.Connection.AddConnectionListener(OnConnectedToMasterEventHandler, true);
+            // Subscribe to disconnection event
             Msf.Connection.AddDisconnectionListener(OnDisconnectedFromMasterEventHandler, true);
         }
 
@@ -77,17 +85,21 @@ namespace Barebones.MasterServer
         {
             if (killProcessesWhenAppQuits)
             {
-                SpawnerController.KillProcessesSpawnedWithDefaultHandler();
+                spawnerController?.KillProcesses();
             }
         }
 
         protected virtual void OnDestroy()
         {
-            // Remove listener
+            // Remove connection listener
             Msf.Connection.RemoveConnectionListener(OnConnectedToMasterEventHandler);
+            // Remove disconnection listener
             Msf.Connection.RemoveDisconnectionListener(OnDisconnectedFromMasterEventHandler);
         }
 
+        /// <summary>
+        /// Fired when spawner connected to master
+        /// </summary>
         protected virtual void OnConnectedToMasterEventHandler()
         {
             // If we want to start a spawner (cmd argument was found)
@@ -101,9 +113,12 @@ namespace Barebones.MasterServer
             }
         }
 
+        /// <summary>
+        /// Fired when spawner disconnected from master
+        /// </summary>
         protected virtual void OnDisconnectedFromMasterEventHandler()
         {
-            SpawnerController.KillProcessesSpawnedWithDefaultHandler();
+            spawnerController?.KillProcesses();
         }
 
         public virtual void StartSpawner()
@@ -178,22 +193,22 @@ namespace Barebones.MasterServer
         }
 
         /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="spawnid"></param>
-        private void KillRequestHandler(int spawnid)
-        {
-            spawnerController.DefaultKillSpawnedProcessRequestHandler(spawnid);
-        }
-
-        /// <summary>
-        /// 
+        /// This is just an example of using custom spawn request handler
         /// </summary>
         /// <param name="packet"></param>
         /// <param name="message"></param>
         protected virtual void SpawnRequestHandler(SpawnRequestPacket packet, IIncommingMessage message)
         {
             spawnerController.DefaultSpawnRequestHandler(packet, message);
+        }
+
+        /// <summary>
+        /// This is just an example of using custom kill request handler
+        /// </summary>
+        /// <param name="spawnid"></param>
+        protected virtual void KillRequestHandler(int spawnid)
+        {
+            spawnerController.DefaultKillRequestHandler(spawnid);
         }
     }
 }

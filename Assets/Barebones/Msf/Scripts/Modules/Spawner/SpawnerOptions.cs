@@ -9,22 +9,22 @@ namespace Barebones.MasterServer
         /// <summary>
         /// Public IP address of the machine, on which the spawner is running
         /// </summary>
-        public string MachineIp = "xxx.xxx.xxx.xxx";
+        public string MachineIp { get; set; } = "xxx.xxx.xxx.xxx";
 
         /// <summary>
         /// Max number of processes that this spawner can handle. If 0 - unlimited
         /// </summary>
-        public int MaxProcesses = 0;
+        public int MaxProcesses { get; set; } = 0;
 
         /// <summary>
         /// Spawner properties
         /// </summary>
-        public Dictionary<string, string> Properties;
+        public Dictionary<string, string> Properties { get; set; }
 
         /// <summary>
         /// Region, to which the spawner belongs
         /// </summary>
-        public string Region = "International";
+        public string Region { get; set; } = "International";
 
         public override void ToBinaryWriter(EndianBinaryWriter writer)
         {

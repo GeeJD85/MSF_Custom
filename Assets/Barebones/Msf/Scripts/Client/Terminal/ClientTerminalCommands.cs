@@ -20,15 +20,15 @@ namespace Barebones.Client.Utilities
         {
             if(args.Length > 0)
             {
-                ConnectionToMaster.Instance.SetIpAddress(args[0].String);
+                ClientToMasterConnector.Instance.SetIpAddress(args[0].String);
             }
 
             if (args.Length > 1)
             {
-                ConnectionToMaster.Instance.SetPort(Mathf.Clamp(args[0].Int, 0, ushort.MaxValue));
+                ClientToMasterConnector.Instance.SetPort(Mathf.Clamp(args[0].Int, 0, ushort.MaxValue));
             }
 
-            ConnectionToMaster.Instance.StartConnection();
+            ClientToMasterConnector.Instance.StartConnection();
         }
 
         [RegisterCommand(Name = "client.disconnect", Help = "Disconnects the client from master", MaxArgCount = 0)]

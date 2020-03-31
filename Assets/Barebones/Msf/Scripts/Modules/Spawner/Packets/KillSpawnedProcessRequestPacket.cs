@@ -2,10 +2,10 @@
 
 namespace Barebones.MasterServer
 {
-    public class KillSpawnedProcessPacket : SerializablePacket
+    public class KillSpawnedProcessRequestPacket : SerializablePacket
     {
-        public int SpawnerId;
-        public int SpawnId;
+        public int SpawnerId { get; set; }
+        public int SpawnId { get; set; }
 
         public override void ToBinaryWriter(EndianBinaryWriter writer)
         {

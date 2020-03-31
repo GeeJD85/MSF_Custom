@@ -50,6 +50,23 @@ namespace Barebones.MasterServer
         }
 
         /// <summary>
+        /// Fires when new status received
+        /// </summary>
+        /// <param name="message"></param>
+        private static void StatusUpdateHandler(IIncommingMessage message)
+        {
+            var data = message.Deserialize(new SpawnStatusUpdatePacket());
+
+            Logs.Debug($"Status changed to {data.Status}");
+
+            if (Msf.Client.Spawners.TryGetRequestController(data.SpawnId, out SpawnRequestController controller))
+            {
+                controller.Status = data.Status;
+                controller.OnStatusChangedEvent?.Invoke(data.Status);
+            }
+        }
+
+        /// <summary>
         /// Abort current spawn process by Id
         /// </summary>
         public void Abort()
@@ -73,21 +90,6 @@ namespace Barebones.MasterServer
         public void GetFinalizationData(MsfSpawnersClient.FinalizationDataHandler handler)
         {
             Msf.Client.Spawners.GetFinalizationData(SpawnId, handler, connection);
-        }
-
-        /// <summary>
-        /// Fires when new status received
-        /// </summary>
-        /// <param name="message"></param>
-        private static void StatusUpdateHandler(IIncommingMessage message)
-        {
-            var data = message.Deserialize(new SpawnStatusUpdatePacket());
-
-            if(Msf.Client.Spawners.TryGetRequestController(data.SpawnId, out SpawnRequestController controller))
-            {
-                controller.Status = data.Status;
-                controller.OnStatusChangedEvent?.Invoke(data.Status);
-            }
         }
     }
 }

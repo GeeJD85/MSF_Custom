@@ -17,42 +17,50 @@ namespace Barebones.MasterServer
         [Header("Base Module Settings"), SerializeField]
         protected LogLevel logLevel = LogLevel.Info;
 
-        public bool IsConnected => Msf.Connection != null && Msf.Connection.IsConnected;
+        /// <summary>
+        /// Current module connection
+        /// </summary>
+        public IClientSocket Connection { get; protected set; }
 
-        public IClientSocket Connection => Msf.Connection;
+        /// <summary>
+        /// Check if current module connection isconnected to server
+        /// </summary>
+        public bool IsConnected => Connection != null && Connection.IsConnected;
 
         protected virtual void Awake()
         {
+            Connection = Msf.Connection;
+
             logger = Msf.Create.Logger(GetType().Name);
             logger.LogLevel = logLevel;
 
-            Msf.Connection.OnStatusChangedEvent += OnConnectionStatusChanged;
+            Connection.AddConnectionListener(ConnectedToMaster);
+            Connection.OnStatusChangedEvent += OnConnectionStatusChanged;
         }
 
         protected virtual void Start()
         {
             Initialize();
-            Msf.Connection.AddConnectionListener(ConnectedToMaster);
         }
 
         protected virtual void OnDestroy()
         {
-            Msf.Connection.OnStatusChangedEvent -= OnConnectionStatusChanged;
-            Msf.Connection.RemoveConnectionListener(ConnectedToMaster);
+            Connection.OnStatusChangedEvent -= OnConnectionStatusChanged;
+            Connection.RemoveConnectionListener(ConnectedToMaster);
         }
 
         private void ConnectedToMaster()
         {
-            Msf.Connection.RemoveConnectionListener(ConnectedToMaster);
-            Msf.Connection.AddDisconnectionListener(DisconnectedToMaster);
+            Connection.RemoveConnectionListener(ConnectedToMaster);
+            Connection.AddDisconnectionListener(DisconnectedToMaster);
 
             OnConnectedToMaster();
         }
 
         private void DisconnectedToMaster()
         {
-            Msf.Connection.AddConnectionListener(ConnectedToMaster);
-            Msf.Connection.RemoveDisconnectionListener(DisconnectedToMaster);
+            Connection.AddConnectionListener(ConnectedToMaster);
+            Connection.RemoveDisconnectionListener(DisconnectedToMaster);
 
             OnDisconnectedFromMaster();
         }

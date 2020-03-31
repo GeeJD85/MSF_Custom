@@ -5,8 +5,8 @@ namespace Barebones.MasterServer
 {
     public class SpawnFinalizationPacket : SerializablePacket
     {
-        public int SpawnId;
-        public Dictionary<string, string> FinalizationData;
+        public int SpawnId { get; set; }
+        public Dictionary<string, string> FinalizationData { get; set; }
 
         public override void ToBinaryWriter(EndianBinaryWriter writer)
         {

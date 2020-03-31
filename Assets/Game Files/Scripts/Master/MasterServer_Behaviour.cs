@@ -56,13 +56,13 @@ namespace GW.Master
             // Check is command line argument '-msfMasterPort' is defined
             if (Msf.Args.IsProvided(Msf.Args.Names.MasterIp))
             {
-                ip = Msf.Args.MasterIp;
+                serverIP = Msf.Args.MasterIp;
             }
 
             // Check is command line argument '-msfMasterPort' is defined
             if (Msf.Args.IsProvided(Msf.Args.Names.MasterPort))
             {
-                port = Msf.Args.MasterPort;
+                serverPort = Msf.Args.MasterPort;
             }
         }
 
@@ -102,7 +102,7 @@ namespace GW.Master
 
         protected override void OnStartedServer()
         {
-            logger.Info($"Master Server is started and listening to: {ip}:{port}");
+            logger.Info($"Master Server is started and listening to: {serverIP}:{serverPort}");
 
             base.OnStartedServer();
 

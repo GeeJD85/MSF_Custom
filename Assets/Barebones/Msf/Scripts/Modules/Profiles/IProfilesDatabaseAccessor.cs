@@ -7,6 +7,7 @@ namespace Barebones.MasterServer
     /// </summary>
     public interface IProfilesDatabaseAccessor
     {
+
         IProfileData GetProfileByUsername(string username);
         /// <summary>
         /// Should restore all values of the given profile, 

@@ -1,6 +1,8 @@
 ﻿using Barebones.Logging;
 using Barebones.MasterServer;
+using Barebones.Networking;
 using CommandTerminal;
+using System;
 using System.Collections.Generic;
 
 namespace Barebones.Client.Utilities
@@ -26,7 +28,23 @@ namespace Barebones.Client.Utilities
                 { "-myAge", "45" }
             };
 
-            Msf.Client.Spawners.RequestSpawn(settings);
+            Msf.Client.Spawners.RequestSpawn(settings, customArgs, string.Empty, OnSpawnRequestHandler);
+        }
+
+        private static void OnSpawnRequestHandler(SpawnRequestController controller, string error)
+        {
+            MsfTimer.WaitWhile(()=> {
+                return controller.Status != SpawnStatus.Finalized;
+            }, (isSuccess) => {
+
+                if (!isSuccess)
+                {
+                    Msf.Client.Spawners.AbortSpawn(controller.SpawnId);
+                    Logs.Error("You have failed to spawn new room");
+                }
+
+                Logs.Info("You have successfully spawned new room");
+            }, 60f);
         }
 
         [RegisterCommand(Name = "client.spawner.abort", Help = "Send request to start room. 1 Process Id", MinArgCount = 1, MaxArgCount = 1)]

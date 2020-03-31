@@ -149,7 +149,7 @@ namespace Barebones.MasterServer
         {
             var spawners = GetFilteredSpawners(properties, region);
 
-            if (spawners.Count < 0)
+            if (spawners.Count == 0)
             {
                 logger.Warn("No spawner was returned after filtering. " + (string.IsNullOrEmpty(region) ? "" : "Region: " + region));
                 return null;
@@ -266,11 +266,26 @@ namespace Barebones.MasterServer
             var data = message.Deserialize(new ClientsSpawnRequestPacket());
             var peer = message.Peer;
 
-            logger.Info($"Client {peer.Id} requested to spawn room {data.Options[MsfDictKeys.roomName]}");
+            if (data.Options.ContainsKey(MsfDictKeys.roomName))
+            {
+                logger.Info($"Client {peer.Id} requested to spawn room with the name {data.Options[MsfDictKeys.roomName]}");
+            }
+            else
+            {
+                logger.Info($"Client {peer.Id} requested to spawn room");
+            }
+
+            if (spawnersList.Count == 0)
+            {
+                logger.Error("But no registered spawner was found!");
+                message.Respond("No registered spawner was found", ResponseStatus.Failed);
+                return;
+            }
 
             // Check if current request is authorized
             if (!CanClientSpawn(peer, data))
             {
+                logger.Error("Unauthorized request");
                 // Client can't spawn
                 message.Respond("Unauthorized", ResponseStatus.Unauthorized);
                 return;
@@ -281,6 +296,7 @@ namespace Barebones.MasterServer
 
             if (prevRequest != null && !prevRequest.IsDoneStartingProcess)
             {
+                logger.Warn("And he already has an active request");
                 // Client has unfinished request
                 message.Respond("You already have an active request", ResponseStatus.Failed);
                 return;
@@ -292,6 +308,7 @@ namespace Barebones.MasterServer
             // If spawn task is not created
             if (task == null)
             {
+                logger.Warn("But all the servers are busy. Let him try again later");
                 message.Respond("All the servers are busy. Try again later".ToBytes(), ResponseStatus.Failed);
                 return;
             }
@@ -299,7 +316,7 @@ namespace Barebones.MasterServer
             // Save spawn task requester
             task.Requester = message.Peer;
 
-            // Save the task
+            // Save the task as peer property
             peer.SetProperty((int)MsfPropCodes.ClientSpawnRequest, task);
 
             // Listen to status changes
@@ -339,6 +356,8 @@ namespace Barebones.MasterServer
                 message.Respond("Already aborting", ResponseStatus.Success);
                 return;
             }
+
+            logger.Debug($"Client [{message.Peer.Id}] requested to terminate process [{prevRequest.SpawnId}]");
 
             prevRequest.Abort();
 

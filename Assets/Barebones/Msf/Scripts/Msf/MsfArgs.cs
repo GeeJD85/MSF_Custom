@@ -114,14 +114,14 @@ namespace Barebones.MasterServer
             DestroyUi = IsProvided(Names.DestroyUi);
 
             MasterPort = ExtractValueInt(Names.MasterPort, 5000);
-            MasterIp = ExtractValue(Names.MasterIp);
+            MasterIp = ExtractValue(Names.MasterIp, "127.0.0.1");
 
             RoomIp = ExtractValue(Names.RoomIp, "127.0.0.1");
             RoomPort = ExtractValueInt(Names.RoomPort, 7777);
             RoomExecutablePath = ExtractValue(Names.RoomExecutablePath);
             RoomMaxConnections = ExtractValueInt(Names.RoomMaxConnections, 1000);
 
-            SpawnId = ExtractValueInt(Names.SpawnId);
+            SpawnId = ExtractValueInt(Names.SpawnId, -1);
             SpawnCode = ExtractValue(Names.SpawnCode);
             DontSpawnInBatchmode = IsProvided(Names.DontSpawnInBatchmode);
             MaxProcesses = ExtractValueInt(Names.MaxProcesses, 0);

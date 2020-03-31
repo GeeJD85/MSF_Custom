@@ -21,7 +21,6 @@ namespace Barebones.MasterServer
 
         public MsfFriendClient Friendlist { get; private set; }
 
-
         public MsfClient(IClientSocket connection) : base(connection)
         {
             Rooms = new MsfRoomsClient(connection);
